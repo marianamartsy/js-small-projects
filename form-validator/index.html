@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walidator formularza</title>
+    <link
+        href="https://fonts.googleapis.com/css?family=Dancing+Script|Montserrat:400,700&amp;display=swap&amp;subset=latin-ext"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <form>
+            <h1>Zarejestruj się!</h1>
+            <div class="form-box">
+                <label for="username">Nazwa użytkownika:</label>
+                <input type="text" placeholder="Podaj nazwę użytkownika" id="username">
+                <div class="error-text">error</div>
+            </div>
+            <div class="form-box">
+                <label for="password">Hasło:</label>
+                <input type="password" placeholder="Podaj hasło" id="password">
+                <div class="error-text">error</div>
+            </div>
+            <div class="form-box">
+                <label for="password2">Powtórz hasło:</label>
+                <input type="password" placeholder="Powtórz hasło" id="password2">
+                <div class="error-text">error</div>
+            </div>
+            <div class="form-box">
+                <label for="email">Adres e-mail:</label>
+                <input type="email" placeholder="Podaj nazwę użytkownika" id="email">
+                <div class="error-text">error</div>
+            </div>
+
+            <div class="control-buttons">
+                <button class="clear">Wyczyść</button>
+                <button class="send">Wyślij</button>
+            </div>
+            <div class="popup">
+                <p>Formularz został poprawnie wysłany!</p>
+                <button class="close">Zamknij</button>
+            </div>
+        </form>
+    </div>
+
+
+
+
+    <script src="main.js"></script>
+</body>
+
+</html>
