@@ -1,133 +1,138 @@
-const incomeSection = document.querySelector('.income-area');
-const expensesSection = document.querySelector('.expenses-area');
-const availableMoney = document.querySelector('.available-money');
-const addTransactionPanel = document.querySelector('.add-transaction-panel');
+// DOM elements
 
-const nameInput = document.querySelector('#name');
-const amountInput = document.querySelector('#amount');
-const categorySelect = document.querySelector('#category');
+const incomeSection = document.querySelector('.income-area')
+const expensesSection = document.querySelector('.expenses-area')
+const availableMoney = document.querySelector('.available-money')
+const addTransactionPanel = document.querySelector('.add-transaction-panel')
 
-const addTransactionBtn = document.querySelector('.add-transaction');
-const saveBtn = document.querySelector('.save');
-const cancelBtn = document.querySelector('.cancel');
-const deleteAllBtn = document.querySelector('.delete-all');
+const nameInput = document.querySelector('#name')
+const amountInput = document.querySelector('#amount')
+const categorySelect = document.querySelector('#category')
 
-const lightStyleBtn = document.querySelector('.light');
-const darkStyleBtn = document.querySelector('.dark');
+const addTransactionBtn = document.querySelector('.add-transaction')
+const saveBtn = document.querySelector('.save')
+const cancelBtn = document.querySelector('.cancel')
+const deleteAllBtn = document.querySelector('.delete-all')
 
-let root = document.documentElement;
-let ID = 0;
-let categoryIcon;
-let selectedCategory;
-let moneyArr = [0];
+const lightStyleBtn = document.querySelector('.light')
+const darkStyleBtn = document.querySelector('.dark')
 
+let root = document.documentElement
+let ID = 0
+let categoryIcon
+let selectedCategory
+let moneyArr = [0]
+
+// FUNCTIONS
 
 const showPanel = () => {
-    addTransactionPanel.style.display = 'flex';
+	addTransactionPanel.style.display = 'flex'
 }
 
 const closePanel = () => {
-    addTransactionPanel.style.display = 'none';
-    clearInputs();
+	addTransactionPanel.style.display = 'none'
+	clearInputs()
 }
 
 const checkForm = () => {
-    if (nameInput.value !== '' && amountInput.value !== '' && categorySelect.value !== 'none') {
-        createNewTransaction();
-    } else {
-        alert('Wypełnij wszystkie pola!')
-    }
+	if (nameInput.value !== '' && amountInput.value !== '' && categorySelect.value !== 'none') {
+		createNewTransaction()
+	} else {
+		alert('Fill in all fields!')
+	}
 }
 
 const clearInputs = () => {
-    nameInput.value = '';
-    amountInput.value = '';
-    categorySelect.selectedIndex = 0;
+	nameInput.value = ''
+	amountInput.value = ''
+	categorySelect.selectedIndex = 0
 }
 
 const createNewTransaction = () => {
-    const newTransaction = document.createElement('div');
-    newTransaction.classList.add('transaction');
-    newTransaction.setAttribute('id', ID);
-    checkCategory(selectedCategory);
+	const newTransaction = document.createElement('div')
+	newTransaction.classList.add('transaction')
+	newTransaction.setAttribute('id', ID)
 
-    newTransaction.innerHTML = `
-        <p class="transaction-name">
-        ${categoryIcon} ${nameInput.value}
-        </p>
-        <p class="transaction-amount">
-        ${amountInput.value}zł 
-        <button class="delete" onclick="deleteTransatcion(${ID})"><i class="fas fa-times"></i></button>
-        </p>
-    `;
+	checkCategory(selectedCategory)
 
-    amountInput.value > 0 ? incomeSection.appendChild(newTransaction) && newTransaction.classList.add('income') : expensesSection.appendChild(newTransaction) && newTransaction.classList.add('expense');
-    moneyArr.push(parseFloat(amountInput.value));
-    countMoney(moneyArr)
-    closePanel();
-    ID++;
-    clearInputs();
+	newTransaction.innerHTML = `
+    <p class="transaction-name">${categoryIcon} ${nameInput.value}</p>
+    <p class="transaction-amount">${amountInput.value}$ <button class="delete" onclick = "deleteTransaction(${ID})"><i class="fas fa-times"></i></button>
+    </p>`
+
+	amountInput.value > 0
+		? incomeSection.appendChild(newTransaction) && newTransaction.classList.add('income')
+		: expensesSection.appendChild(newTransaction) && newTransaction.classList.add('expense')
+
+	moneyArr.push(parseFloat(amountInput.value))
+	countMoney(moneyArr)
+	closePanel()
+	ID++
+	clearInputs()
 }
 
 const selectCategory = () => {
-    selectedCategory = categorySelect.options[categorySelect.selectedIndex].text;
+	selectedCategory = categorySelect.options[categorySelect.selectedIndex].text
 }
 
 const checkCategory = transaction => {
-    switch (transaction) {
-        case '[ + ] Przychód':
-            categoryIcon = '<i class="fas fa-money-bill-wave"></i>'
-            break;
-        case '[ - ] Zakupy':
-            categoryIcon = '<i class="fas fa-cart-arrow-down"></i>'
-            break;
-        case '[ - ] Jedzenie':
-            categoryIcon = '<i class="fas fa-hamburger"></i>'
-            break;
-        case '[ - ] Kino':
-            categoryIcon = '<i class="fas fa-film"></i>'
-            break;
-    }
+	switch (transaction) {
+		case '[ + ] Income':
+			categoryIcon = '<i class="fas fa-money-bill-wave"></i>'
+			break
+		case '[ - ] Shopping':
+			categoryIcon = '<i class="fas fa-cart-arrow-down"></i>'
+			break
+		case '[ - ] Food':
+			categoryIcon = '<i class="fas fa-hamburger"></i>'
+			break
+		case '[ - ] Cinema':
+			categoryIcon = '<i class="fas fa-film"></i>'
+			break
+	}
 }
 
 const countMoney = money => {
-    const newMoney = money.reduce((a, b) => a + b);
-    availableMoney.textContent = `${newMoney}zł`;
+	const newMoney = money.reduce((a, b) => a + b)
+	availableMoney.textContent = `${newMoney}$`
 }
 
-const deleteTransatcion = id => {
-    const transactionToDelete = document.getElementById(id);
-    const transactionAmount = parseFloat(transactionToDelete.childNodes[3].innerText);
-    const indexOfTransaction = moneyArr.indexOf(transactionAmount);
+const deleteTransaction = id => {
+	const transactionToDelete = document.getElementById(id)
+	const transactionAmount = parseFloat(transactionToDelete.childNodes[3].innerText)
+	const indexOfTransaction = moneyArr.indexOf(transactionAmount)
 
-    moneyArr.splice(indexOfTransaction, 1)
+	moneyArr.splice(indexOfTransaction, 1)
 
-    transactionToDelete.classList.contains('income') ? incomeSection.removeChild(transactionToDelete) : expensesSection.removeChild(transactionToDelete)
-    countMoney(moneyArr)
+	transactionToDelete.classList.contains('income')
+		? incomeSection.removeChild(transactionToDelete)
+		: expensesSection.removeChild(transactionToDelete)
+
+	countMoney(moneyArr)
 }
 
 const deleteAllTransactions = () => {
-    incomeSection.innerHTML = '<h3>Przychód:</h3>';
-    expensesSection.innerHTML = '<h3>Wydatki:</h3>';
-    availableMoney.textContent = '0zł'
-    moneyArr = [0];
+	incomeSection.innerHTML = '<h3>Income:</h3>'
+	expensesSection.innerHTML = '<h3>Expenses:</h3>'
+	availableMoney.textContent = '0$'
+	moneyArr = [0]
 }
 
 const changeStyleToLight = () => {
-    root.style.setProperty('--first-color', '#F9F9F9');
-    root.style.setProperty('--second-color', '#14161F');
-    root.style.setProperty('--border-color', 'rgba(0, 0, 0, .2)');
+	root.style.setProperty('--first-color', '#F9F9F9')
+	root.style.setProperty('--second-color', '#14161F')
+	root.style.setProperty('--border-color', 'rgba(0, 0, 0, .2)')
 }
 
 const changeStyleToDark = () => {
-    root.style.setProperty('--first-color', '#14161F');
-    root.style.setProperty('--second-color', '#F9F9F9');
-    root.style.setProperty('--border-color', 'rgba(255, 255, 255, .4)');
+	root.style.setProperty('--first-color', '#14161F')
+	root.style.setProperty('--second-color', '#F9F9F9')
+	root.style.setProperty('--border-color', 'rgba(255, 255, 255, .4)')
 }
 
-addTransactionBtn.addEventListener('click', showPanel);
-cancelBtn.addEventListener('click', closePanel);
-saveBtn.addEventListener('click', checkForm);
-deleteAllBtn.addEventListener('click', deleteAllTransactions);
-lightStyleBtn.addEventListener('click', changeStyleToLight);
-darkStyleBtn.addEventListener('click', changeStyleToDark);
+addTransactionBtn.addEventListener('click', showPanel)
+cancelBtn.addEventListener('click', closePanel)
+saveBtn.addEventListener('click', checkForm)
+deleteAllBtn.addEventListener('click', deleteAllTransactions)
+lightStyleBtn.addEventListener('click', changeStyleToLight)
+darkStyleBtn.addEventListener('click', changeStyleToDark)
